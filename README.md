@@ -29,25 +29,14 @@ Eight tools, all read-only:
 
 ## Connect from Claude Desktop / Claude Code / Cursor / Windsurf
 
-Add this block to your client's MCP config. The hosted server uses standard MCP
-Streamable HTTP, and the universal `mcp-remote` proxy from npm bridges stdio to
-the remote endpoint, so no install is needed beyond what `npx` does on demand.
+You need an API key first. Sign up at https://seomcp.io/Account/Register, copy
+the key from your dashboard. The free tier is enough for research and small
+agent workloads. The same key also works against the REST API.
 
-```json
-{
-  "mcpServers": {
-    "seomcp": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://seomcp.io/mcp"]
-    }
-  }
-}
-```
-
-During the public beta the MCP endpoint is open, so the snippet above works
-without any credentials. Sign up at https://seomcp.io/Account/Register for an
-API key when you want usage tracking, higher rate limits, or to use the same
-key with the REST API. To pass a key, add a header argument:
+The hosted server uses standard MCP Streamable HTTP, and the universal
+`mcp-remote` proxy from npm bridges stdio to the remote endpoint, so no install
+is needed beyond what `npx` does on demand. Add this block to your client's MCP
+config:
 
 ```json
 {
@@ -63,6 +52,10 @@ key with the REST API. To pass a key, add a header argument:
   }
 }
 ```
+
+Replace `YOUR_API_KEY_HERE` with the key from your dashboard. Note there is no
+space after the colon in the header value — `mcp-remote` parses the argument
+strictly.
 
 ### Where the config lives by client
 
