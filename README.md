@@ -9,26 +9,45 @@ repository is the public connection point for clients like Claude Desktop,
 Claude Code, Cursor, and Windsurf.
 
 - Web UI: https://seomcp.io
-- REST API: https://seomcp.io/swagger
+- REST API reference: https://seomcp.io/swagger
 - Sign up (free tier): https://seomcp.io/Account/Register
 
 ## What you can do with it
 
-| Tool | What it returns |
-|---|---|
-| `GetDomainOverview` | Domain Rank (0-100), backlinks, referring domains, country, category |
-| `GetBacklinks` | List of backlinks for a target domain with anchor text and dofollow flag |
-| `GetReferringDomains` | Aggregated list of domains linking to a target |
-| `GetTopDomains` | Top-ranked domains filtered by country, category, and rank threshold |
+Eight tools, all read-only:
 
-A free API key gets you all of these with a daily quota that fits research and
-small agent workloads. Higher tiers and details on the [pricing page](https://seomcp.io).
+| Tool | Purpose |
+|---|---|
+| `get_domain_overview` | Domain Rank (0-100), backlinks, referring domains, country, category |
+| `check_domain_authority` | Rank score, referring domains, dofollow ratio |
+| `get_backlinks` | Backlinks pointing to a domain with anchor text and dofollow flag |
+| `get_referring_domains` | Aggregated list of unique domains linking to a target |
+| `get_top_domains` | Top-ranked domains, optionally filtered by country and category |
+| `get_domain_pages` | Page-level SEO metadata (titles, descriptions, h1s, status codes) |
+| `get_domain_contacts` | Emails, phones, addresses, and social profiles for a domain |
+| `get_domain_history` | Backlink trend over time for a domain |
 
 ## Connect from Claude Desktop / Claude Code / Cursor / Windsurf
 
-The hosted server uses the standard MCP Streamable HTTP transport. Most clients
-ship with `mcp-remote` or equivalent, which proxies stdio to a remote endpoint.
-Add this block to your client's MCP config:
+Add this block to your client's MCP config. The hosted server uses standard MCP
+Streamable HTTP, and the universal `mcp-remote` proxy from npm bridges stdio to
+the remote endpoint, so no install is needed beyond what `npx` does on demand.
+
+```json
+{
+  "mcpServers": {
+    "seomcp": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://seomcp.io/mcp"]
+    }
+  }
+}
+```
+
+During the public beta the MCP endpoint is open, so the snippet above works
+without any credentials. Sign up at https://seomcp.io/Account/Register for an
+API key when you want usage tracking, higher rate limits, or to use the same
+key with the REST API. To pass a key, add a header argument:
 
 ```json
 {
@@ -36,34 +55,26 @@ Add this block to your client's MCP config:
     "seomcp": {
       "command": "npx",
       "args": [
-        "-y",
-        "mcp-remote",
+        "-y", "mcp-remote",
         "https://seomcp.io/mcp",
-        "--header",
-        "X-API-Key: ${SEOMCP_API_KEY}"
-      ],
-      "env": {
-        "SEOMCP_API_KEY": "your_api_key_here"
-      }
+        "--header", "X-API-Key:YOUR_API_KEY_HERE"
+      ]
     }
   }
 }
 ```
 
-Replace `your_api_key_here` with the key you get after signing up at
-https://seomcp.io/Account/Register.
-
 ### Where the config lives by client
 
 - **Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS), `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
-- **Claude Code**: `~/.claude.json` (or `claude mcp add seomcp` in the CLI)
-- **Cursor**: Settings, MCP, then add the same JSON
-- **Windsurf**: Settings, Model Context Protocol, then add the same JSON
+- **Claude Code**: `~/.claude.json`, or run `claude mcp add seomcp` in the CLI
+- **Cursor**: Settings, MCP servers, Add new
+- **Windsurf**: Settings, Model Context Protocol, Add new
 
 After saving, restart the client. The `seomcp` server should appear in the
 available tools list.
 
-## Direct API use without MCP
+## Direct REST use without MCP
 
 If you would rather call the REST API directly, the same key works:
 
