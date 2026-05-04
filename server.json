@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.seo-mcp/seomcp",
+  "description": "Backlink data, domain authority, contact discovery, and page metadata for 67M+ domains. Free tier.",
+  "websiteUrl": "https://seomcp.io",
+  "repository": {
+    "url": "https://github.com/seo-mcp/seomcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://seomcp.io/mcp"
+    }
+  ]
+}
